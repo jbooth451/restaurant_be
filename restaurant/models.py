@@ -1,6 +1,7 @@
 # restaurant/models.py
 from django.db import models
 from django.core.validators import RegexValidator
+from django.core.exceptions import ValidationError
 
 
 class User(models.Model):
@@ -26,6 +27,22 @@ class User(models.Model):
 
     def __str__(self):
         return f"{self.UserFirstName} {self.UserLastName}"
+
+
+class Table(models.Model):
+    tableSize_choices = [
+        (2, 'Table for 2'),
+        (4, 'Table for 4'),
+        (8, 'Table for 8'),
+        (12, 'Table for 12'),
+        (20, 'Table for 20'),
+    ]
+
+    tableID = models.AutoField(primary_key=True)
+    tableSize = models.IntegerField(choices=tableSize_choices)
+
+    def __str__(self):
+        return f"Table {self.tableID} - {self.get_tableSize_display()}"
 
 
 class Reservation(models.Model):
@@ -77,9 +94,27 @@ class Reservation(models.Model):
     )
     Date = models.DateField()
     UserID = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reservations')
+    table = models.ForeignKey(Table, null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return f"Reservation for {self.UserID.UserFirstName} {self.UserID.UserLastName} on {self.Date} at {self.TimeOfReservation}"
+
+    def select_table(self):
+        if self.TimeOfReservation is None:
+            raise ValidationError("Time of reservation is required to select a table.")
+
+        if self.table:
+            raise ValidationError("A table has already been selected for this reservation.")
+
+        # Find an available table based on table size
+        available_tables = Table.objects.filter(tableSize=self.tableSize, reservation__isnull=True)
+
+        if not available_tables:
+            raise ValidationError("No available tables for this table size.")
+
+        table = available_tables.first()
+        table.reservation = self
+        table.save()
 
 
 class Employee(models.Model):
