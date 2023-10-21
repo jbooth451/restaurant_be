@@ -111,3 +111,36 @@ class Employee(models.Model):
 
     def __str__(self):
         return f"{self.FirstName} {self.LastName}"
+
+
+from django.db import models
+
+
+class FoodMenu(models.Model):
+    MENU_CATEGORIES = [
+        ('Appetizers', 'Appetizers'),
+        ('Soups and Salads', 'Soups and Salads'),
+        ('Sandwiches & Burgers', 'Sandwiches & Burgers'),
+        ('Main Entrees', 'Main Entrees'),
+        ('Desserts', 'Desserts'),
+        ('Sides', 'Sides'),
+        ('Drinks', 'Drinks'),
+    ]
+
+    FOOD_SIZES = [
+        ('Tiny Ones', 'Tiny Ones'),
+        ('Small Kid', 'Small Kid'),
+        ('Big Kid', 'Big Kid'),
+        ('Teen', 'Teen'),
+        ('Adult', 'Adult'),
+    ]
+
+    MenuID = models.AutoField(primary_key=True)
+    foodCategory = models.CharField(max_length=20, choices=MENU_CATEGORIES)
+    foodName = models.CharField(max_length=100)
+    foodPic = models.ImageField(upload_to='food_pics/')
+    foodSize = models.CharField(max_length=20, choices=FOOD_SIZES)
+    foodPrice = models.DecimalField(max_digits=5, decimal_places=2)
+
+    def __str__(self):
+        return self.foodName
