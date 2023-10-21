@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import User
 from .models import Reservation
+from .models import Employee
 
 #register models
 class UserAdmin(admin.ModelAdmin):
@@ -14,3 +15,4 @@ class ReservationAdmin(admin.ModelAdmin):
 
 admin.site.register(User)
 admin.site.register(Reservation, ReservationAdmin)
+admin.site.register(Employee)

@@ -1,7 +1,6 @@
-from django.db import models
-
 # restaurant/models.py
 from django.db import models
+from django.core.validators import RegexValidator
 
 class User(models.Model):
     UserID = models.AutoField(primary_key=True)
@@ -80,3 +79,35 @@ class Reservation(models.Model):
 
     def __str__(self):
         return f"Reservation for {self.UserID.UserFirstName} {self.UserID.UserLastName} on {self.Date} at {self.TimeOfReservation}"
+
+
+class Employee(models.Model):
+    EmployeeID = models.AutoField(primary_key=True)
+    HireDate = models.DateField()
+    FirstName = models.CharField(max_length=50)
+    LastName = models.CharField(max_length=50)
+    Position = models.CharField(max_length=50)
+    Address1 = models.CharField(max_length=100)
+    Address2 = models.CharField(max_length=100, blank=True, null=True)
+    City = models.CharField(max_length=50)
+
+    STATE_CHOICES = (
+        ('Nebraska', 'Nebraska'),
+        ('Iowa', 'Iowa'),
+    )
+    State = models.CharField(max_length=50, choices=STATE_CHOICES)
+
+    ZipCode = models.CharField(max_length=5, validators=[RegexValidator(
+        regex=r'^\d{5}$',
+        message='Zip code must be exactly 5 digits.',
+    )])
+
+    PhoneNum = models.CharField(max_length=12, validators=[RegexValidator(
+        regex=r'^\(\d{3}\)-\d{3}-\d{4}$',
+        message='Phone number must be in the format (###)-###-####.',
+    )])
+
+    Password = models.CharField(max_length=128)  # Hash the password using Django's authentication system
+
+    def __str__(self):
+        return f"{self.FirstName} {self.LastName}"
