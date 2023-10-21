@@ -142,3 +142,24 @@ class FoodMenu(models.Model):
 
     def __str__(self):
         return self.foodName
+
+
+class Payment(models.Model):
+    PaymentID = models.AutoField(primary_key=True)
+    userSelect = models.BooleanField()
+    nameOnCard = models.CharField(max_length=100)
+    cardNumber = models.CharField(max_length=19)
+    expDate = models.CharField(max_length=6)
+    cvv = models.CharField(max_length=3)
+    ZipCode = models.CharField(max_length=5)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='payments')
+
+    def __str__(self):
+        return f"PaymentID: {self.PaymentID}"
+
+    def save(self, *args, **kwargs):
+        # Automatically set nameOnCard and ZipCode based on the associated User
+        if self.user:
+            self.nameOnCard = f"{self.user.UserFirstName} {self.user.UserLastName}"
+            self.ZipCode = self.user.ZipCode
+        super().save(*args, **kwargs)
