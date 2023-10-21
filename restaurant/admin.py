@@ -5,6 +5,7 @@ from .models import Employee
 from .models import FoodMenu
 from .models import Payment
 from .models import Table
+from .models import Order
 
 # register models
 
@@ -25,3 +26,4 @@ admin.site.register(Employee)
 admin.site.register(FoodMenu)
 admin.site.register(Payment)
 admin.site.register(Table)
+admin.site.register(Order)

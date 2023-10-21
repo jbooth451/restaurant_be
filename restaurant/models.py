@@ -198,3 +198,26 @@ class Payment(models.Model):
             self.nameOnCard = f"{self.user.UserFirstName} {self.user.UserLastName}"
             self.ZipCode = self.user.ZipCode
         super().save(*args, **kwargs)
+
+
+class Order(models.Model):
+    OrderID = models.AutoField(primary_key=True)
+    OrderDate = models.DateField(auto_now_add=True)  # Defaults to the current date
+    OrderTime = models.TimeField(auto_now_add=True)  # Defaults to the current time
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='orders')
+    food_items = models.ManyToManyField(FoodMenu, through='OrderFoodItem')
+    table = models.ForeignKey(Table, null=True, blank=True, on_delete=models.SET_NULL)
+    payment = models.OneToOneField(Payment, on_delete=models.SET_NULL, null=True, blank=True)
+
+    def __str__(self):
+        return f"Order {self.OrderID} by {self.user.UserFirstName} on {self.OrderDate}"
+
+
+class OrderFoodItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    food_item = models.ForeignKey(FoodMenu, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return f"{self.food_item.foodName} in Order {self.order.OrderID}"
