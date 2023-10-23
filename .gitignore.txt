@@ -23,5 +23,6 @@ media
 **/migrations/**
 !**/migrations
 !**/migrations/__init__.py
+.idea/restaurant_be.iml
 
 #ignore the front-end folder. it is deployed separately
