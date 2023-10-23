@@ -8,8 +8,7 @@ class MenuSerializer(serializers.ModelSerializer):
 
     class Meta:
             model = FoodMenu
-            fields = ('menu_categories','food_sizes', 'MenuID', 'foodCategory', 'foodName', 'foodPic', 'foodSize',
-                      'foodPrice',)
+            fields = ('MenuID', 'foodCategory', 'foodName', 'foodPic', 'foodSize', 'foodPrice',)
 
 class RegisterSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
