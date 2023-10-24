@@ -138,7 +138,7 @@ class Employee(models.Model):
         message='Zip code must be exactly 5 digits.',
     )])
 
-    PhoneNum = models.CharField(max_length=12, validators=[RegexValidator(
+    PhoneNum = models.CharField(max_length=14, validators=[RegexValidator(
         regex=r'^\(\d{3}\)-\d{3}-\d{4}$',
         message='Phone number must be in the format (###)-###-####.',
     )])
