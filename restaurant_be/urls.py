@@ -20,4 +20,10 @@ urlpatterns = [
     path('', views.payment),
     path('api/payment/', views.payment),
     path('api/payment/<int:pk>', views.getPayment),
+    path('', views.table),
+    path('api/table/', views.table),
+    path('api/table/<int:pk>', views.getTable),
+    path('', views.order),
+    path('api/orders/', views.order),
+    path('api/orders/<int:pk>', views.getOrder),
 ]
