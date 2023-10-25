@@ -17,4 +17,7 @@ urlpatterns = [
     path('', views.employee),
     path('api/employee/', views.employee),
     path('api/employee/<int:pk>', views.getEmployee),
+    path('', views.payment),
+    path('api/payment/', views.payment),
+    path('api/payment/<int:pk>', views.getPayment),
 ]

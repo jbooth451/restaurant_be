@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import FoodMenu, Employee
+from .models import FoodMenu, Employee, Payment
 from django.contrib.auth.models import User
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
@@ -51,3 +51,8 @@ class EmployeeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Employee
         fields = ('EmployeeID', 'HireDate', 'FirstName', 'LastName', 'Position', 'Address1', 'Address2', 'City', 'State', 'ZipCode', 'PhoneNum', 'Password')
+
+class PaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payment
+        fields = ('PaymentID', 'userSelect', 'nameOnCard', 'cardNumber', 'expDate', 'cvv', 'ZipCode')
