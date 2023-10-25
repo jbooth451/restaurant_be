@@ -55,4 +55,4 @@ class EmployeeSerializer(serializers.ModelSerializer):
 class PaymentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Payment
-        fields = ('PaymentID', 'userSelect', 'nameOnCard', 'cardNumber', 'expDate', 'cvv', 'ZipCode')
+        fields = ('PaymentID', 'userSelect', 'nameOnCard', 'cardNumber', 'expDate', 'cvv', 'ZipCode', 'user')
