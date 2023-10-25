@@ -26,4 +26,7 @@ urlpatterns = [
     path('', views.order),
     path('api/orders/', views.order),
     path('api/orders/<int:pk>', views.getOrder),
+    path('', views.reservation),
+    path('api/reservation/', views.reservation),
+    path('api/reservation/<int:pk>', views.getReservation),
 ]

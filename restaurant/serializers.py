@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import FoodMenu, Employee, Payment, Order, Table
+from .models import FoodMenu, Employee, Payment, Order, Table, OrderFoodItem, Reservation
 from django.contrib.auth.models import User
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
@@ -66,3 +66,8 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ('OrderID', 'OrderDate', 'OrderTime', 'user', 'employee', 'food_items', 'table', 'payment')
+
+class ReservationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Reservation
+        fields = ('ReservationID', 'TimeOfReservation', 'Date', 'UserID', 'table')
