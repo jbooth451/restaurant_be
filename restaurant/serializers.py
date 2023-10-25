@@ -1,21 +1,23 @@
 from rest_framework import serializers
-from .models import FoodMenu
+from .models import FoodMenu, Employee
 from django.contrib.auth.models import User
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 
-class MenuSerializer(serializers.ModelSerializer):
 
+class MenuSerializer(serializers.ModelSerializer):
     class Meta:
-            model = FoodMenu
-            fields = ('MenuID', 'foodCategory', 'foodName', 'foodPic', 'foodSize', 'foodPrice',)
+        model = FoodMenu
+        fields = ('MenuID', 'foodCategory', 'foodName', 'foodPic', 'foodSize', 'foodPrice',)
+
 
 class RegisterSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
         required=True,
         validators=[UniqueValidator(queryset=User.objects.all())]
     )
-    password = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'}, validators=[validate_password])
+    password = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'},
+                                     validators=[validate_password])
     password2 = serializers.CharField(write_only=True, style={'input_type': 'password'}, required=True)
 
     class Meta:
@@ -43,3 +45,9 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         return user
+
+
+class EmployeeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Employee
+        fields = ('EmployeeID', 'HireDate', 'FirstName', 'LastName', 'Position', 'Address1', 'Address2', 'City', 'State', 'ZipCode', 'PhoneNum', 'Password')

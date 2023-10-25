@@ -14,4 +14,7 @@ urlpatterns = [
     path('api/menu/', views.food_menu),
     path('api/menu/<int:pk>', views.getMenu),
     path('register/', RegisterView.as_view(), name='auth_register'),
+    path('', views.employee),
+    path('api/employee/', views.employee),
+    path('api/employee/<int:pk>', views.getEmployee),
 ]
