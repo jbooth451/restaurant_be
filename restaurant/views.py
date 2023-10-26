@@ -50,7 +50,7 @@ class RegisterView(generics.CreateAPIView):
      queryset = User.objects.all()
      permission_classes = (AllowAny,)
      serializer_class = RegisterSerializer
-
+'''
 @api_view(['GET', 'POST'])
 def employee(request):
     if request.method == 'GET':
@@ -87,6 +87,7 @@ def getEmployee(request, pk):
     elif request.method == 'DELETE':
         employee.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+'''
 @api_view(['GET', 'POST'])
 def payment(request):
     if request.method == 'GET':

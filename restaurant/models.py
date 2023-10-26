@@ -2,31 +2,7 @@
 from django.db import models
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
-
-
-class User(models.Model):
-    UserID = models.AutoField(primary_key=True)
-    UserFirstName = models.CharField(max_length=50)
-    UserLastName = models.CharField(max_length=50)
-    UserName = models.CharField(max_length=50)
-    Password = models.CharField(max_length=100)
-    Email = models.EmailField()
-    DOB = models.DateField()
-    Address1 = models.CharField(max_length=100)
-    Address2 = models.CharField(max_length=100, blank=True, null=True)
-    City = models.CharField(max_length=50)
-    State = models.CharField(
-        max_length=2,
-        choices=[
-            ('NE', 'Nebraska'),
-            ('IA', 'Iowa'),
-            # Add the remaining states here, if we have time...
-        ]
-    )
-    ZipCode = models.CharField(max_length=10)
-
-    def __str__(self):
-        return f"{self.UserFirstName} {self.UserLastName}"
+from django.contrib.auth.models import User
 
 
 class Table(models.Model):
@@ -47,7 +23,7 @@ class Table(models.Model):
 
 class Reservation(models.Model):
     ReservationID = models.AutoField(primary_key=True)
-    TimeOfReservation = models.TimeField(
+    TimeOfReservation = models.CharField(max_length=30,
         choices=[
             ('11:00:00', '11:00 AM'),
             ('11:15:00', '11:15 AM'),
@@ -97,7 +73,7 @@ class Reservation(models.Model):
     table = models.ForeignKey(Table, null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
-        return f"Reservation for {self.UserID.UserFirstName} {self.UserID.UserLastName} on {self.Date} at {self.TimeOfReservation}"
+        return f"Reservation for {self.UserID.first_name} {self.UserID.last_name} on {self.Date} at {self.TimeOfReservation}"
 
     def select_table(self):
         if self.TimeOfReservation is None:
@@ -115,38 +91,6 @@ class Reservation(models.Model):
         table = available_tables.first()
         table.reservation = self
         table.save()
-
-
-class Employee(models.Model):
-    EmployeeID = models.AutoField(primary_key=True)
-    HireDate = models.DateField()
-    FirstName = models.CharField(max_length=50)
-    LastName = models.CharField(max_length=50)
-    Position = models.CharField(max_length=50)
-    Address1 = models.CharField(max_length=100)
-    Address2 = models.CharField(max_length=100, blank=True, null=True)
-    City = models.CharField(max_length=50)
-
-    STATE_CHOICES = (
-        ('Nebraska', 'Nebraska'),
-        ('Iowa', 'Iowa'),
-    )
-    State = models.CharField(max_length=50, choices=STATE_CHOICES)
-
-    ZipCode = models.CharField(max_length=5, validators=[RegexValidator(
-        regex=r'^\d{5}$',
-        message='Zip code must be exactly 5 digits.',
-    )])
-
-    PhoneNum = models.CharField(max_length=14, validators=[RegexValidator(
-        regex=r'^\(\d{3}\)-\d{3}-\d{4}$',
-        message='Phone number must be in the format (###)-###-####.',
-    )])
-
-    Password = models.CharField(max_length=128)  # Hash the password using Django's authentication system
-
-    def __str__(self):
-        return f"{self.FirstName} {self.LastName}"
 
 
 class FoodMenu(models.Model):
@@ -205,7 +149,6 @@ class Order(models.Model):
     OrderDate = models.DateField(auto_now_add=True)  # Defaults to the current date
     OrderTime = models.TimeField(auto_now_add=True)  # Defaults to the current time
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='orders')
     food_items = models.ManyToManyField(FoodMenu, through='OrderFoodItem')
     table = models.ForeignKey(Table, null=True, blank=True, on_delete=models.SET_NULL)
     payment = models.OneToOneField(Payment, on_delete=models.SET_NULL, null=True, blank=True)
