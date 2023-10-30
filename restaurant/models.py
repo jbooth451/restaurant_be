@@ -154,7 +154,7 @@ class Order(models.Model):
     payment = models.OneToOneField(Payment, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
-        return f"Order {self.OrderID} by {self.user.UserFirstName} on {self.OrderDate}"
+        return f"Order {self.OrderID} by {self.user.first_name} on {self.OrderDate}"
 
 
 class OrderFoodItem(models.Model):
